@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,8 +40,8 @@ public class TaskController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
-        Iterable<Task> all = taskService.getAll();
-        return new ResponseEntity<Iterable<Task>>(all, HttpStatus.OK);
+        List<Task> all = taskService.getAll();
+        return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -49,11 +50,16 @@ public class TaskController {
         HttpStatus status;
 
         status = task.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        return new ResponseEntity<Optional<Task>>(task, status);
+        return new ResponseEntity<>(task, status);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteById(@PathVariable Long id) {
         return new ResponseEntity<HttpStatus>(taskService.deleteById(id));
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "Hi";
     }
 }
