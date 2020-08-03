@@ -1,21 +1,33 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { deleteTaskAction } from '../../actions/TaskActions'
 
-function TaskItem() {
+function TaskItem(props) {
+    const { task } = props
+
+    function onDeleteClick(task_id) {
+        props.deleteTaskAction(task_id)
+    }
+
     return (
         <div className="card mb-1 bg-light">
             <div className="card-header text-primary">
-                ID: projectSequence
+                ID: {task.id}
             </div>
             <div className="card-body bg-light">
-                <h5 className="card-title">summary</h5>
+                <h5 className="card-title">
+                    {task.summary}
+                </h5>
                 <p className="card-text text-truncate ">
-                    acceptanceCriteria
+                    {task.acceptanceCriteria}
                 </p>
                 <a href='#' className="btn btn-primary">
                     View / Update
                 </a>
 
-                <button className="btn btn-danger ml-4">
+                <button className="btn btn-danger ml-4" onClick={() => onDeleteClick(props.task.id)}>
                     Delete
                 </button>
             </div>
@@ -23,4 +35,11 @@ function TaskItem() {
     )
 }
 
-export default TaskItem
+TaskItem.propTypes = {
+    deleteTaskAction: PropTypes.func.isRequired
+}
+
+export default connect(
+    null, 
+    {deleteTaskAction}
+) (TaskItem);

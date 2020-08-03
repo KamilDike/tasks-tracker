@@ -1,10 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import classnames from 'classnames'
+import { addTaskAction } from '../../actions/TaskActions'
 
-function AddTask() {
+function AddTask(props) {
     const [summary, setSummary] = useState("")
     const [acceptanceCriteria, setAcceptanceCriteria] = useState("")
     const [status, setStatus] = useState("")
+    const [errors, setErrors] = useState("")
+
+    useEffect(() => {
+        setErrors(props.errors)
+    }, [props.errors])
 
     function onSubmit(e) {
         e.preventDefault()
@@ -14,6 +23,7 @@ function AddTask() {
             status: status
         };
         console.log(newTask)
+        props.addTaskAction(newTask, props.history)
     }
 
     return (
@@ -27,9 +37,16 @@ function AddTask() {
                         <h4 className="display-4 text-center">Add /Update Project Task</h4>
                         <form onSubmit={onSubmit}>
                             <div className="form-group">
-                                <input type="text" className="form-control form-control-lg" name="summary" placeholder="Project Task summary" value={summary}
+                                <input type="text" className={classnames("form-control form-control-lg", {
+                                    "is-invalid": errors.summary})}
+                                    name="summary" placeholder="Project Task summary" value={summary}
                                     onChange={e => setSummary(e.target.value)}
                                 />
+                                {
+                                    errors.summary && (
+                                        <div className="invalid-feedback">{errors.summary}</div>
+                                    )
+                                }
                             </div>
                             <div className="form-group">
                                 <textarea className="form-control form-control-lg" placeholder="Acceptance Criteria" name="acceptanceCriteria" value={acceptanceCriteria}
@@ -54,4 +71,13 @@ function AddTask() {
     )
 }
 
-export default AddTask
+AddTask.propTypes = {
+    addTaskAction: PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+    errors: state.errors
+})
+
+export default connect(mapStateToProps, {addTaskAction}) (AddTask);
