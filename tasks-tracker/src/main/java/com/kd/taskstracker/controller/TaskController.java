@@ -1,5 +1,6 @@
 package com.kd.taskstracker.controller;
 
+import com.kd.taskstracker.exception.NotFoundException;
 import com.kd.taskstracker.model.Task;
 import com.kd.taskstracker.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,27 +40,21 @@ public class TaskController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAll() {
+    public List<Task> getAll() {
         List<Task> all = taskService.getAll();
-        return new ResponseEntity<>(all, HttpStatus.OK);
+        return all;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public Optional<Task> getById(@PathVariable Long id) throws NotFoundException {
         Optional<Task> task = taskService.findById(id);
-        HttpStatus status;
+        HttpStatus status = HttpStatus.OK;
 
-        status = task.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        return new ResponseEntity<>(task, status);
+        return task;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable Long id) {
-        return new ResponseEntity<HttpStatus>(taskService.deleteById(id));
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "Hi";
+    public void deleteById(@PathVariable Long id) throws NotFoundException {
+        taskService.deleteById(id);
     }
 }
