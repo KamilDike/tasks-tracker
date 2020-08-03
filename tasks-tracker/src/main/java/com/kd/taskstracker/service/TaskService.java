@@ -17,7 +17,7 @@ public class TaskService {
 
     public Task saveOrUpdate(Task task) {
         if (task.getStatus() == null || task.getStatus() == "") {
-            task.setStatus("To Do");
+            task.setStatus("TO_DO");
         }
 
         return taskRepository.save(task);
