@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 import AddTask from './components/Task/AddTask';
 import { Provider } from 'react-redux';
 import store from './store';
+import UpdateTask from './components/Task/UpdateTask';
 
 function App() {
   return (
@@ -15,7 +16,8 @@ function App() {
         <div className="App">
           <Navbar></Navbar>
           <Route exact path="/" component={ProjectBoard} />      
-          <Route exact path="/addTask" component={AddTask} />      
+          <Route exact path="/addTask" component={AddTask} />
+          <Route exact path="/updateTask/:task_id" component={UpdateTask} />      
         </div>
       </Router>
     </Provider>

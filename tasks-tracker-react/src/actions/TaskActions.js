@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_ERRORS, GET_TASKS, DELETE_TASK } from './types'
+import { GET_ERRORS, GET_TASKS, DELETE_TASK, GET_TASK } from './types'
 
 export const addTaskAction = (task, history) => async dispatch => {
     try {
@@ -23,6 +23,18 @@ export const getBacklog = () => async dispatch => {
         type: GET_TASKS,
         payload: res.data
     })
+}
+
+export const getTaskAction = (task_id, history) => async dispatch => {
+    try {
+        const res = await axios.get(`http://localhost:8080/api/task/${task_id}`);
+        dispatch ({
+            type: GET_TASK,
+            payload: res.data
+        })
+    } catch (error) {
+        history.push("/");
+    }
 }
 
 export const deleteTaskAction = task_id => async dispatch => {

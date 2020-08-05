@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import classnames from 'classnames'
+import { getTaskAction } from '../../actions/TaskActions'
 
-function UpdateTask() {
+function UpdateTask(props) {
+    useEffect(() => {
+        const { task_id } = props.match.params;
+        props.getTaskAction(task_id); 
+    }, [])
+
     return (
         <div className="addProjectTask">
             <div className="container">
                 <div className="row">
                     <div className="col-md-8 m-auto">
-                        <a href="/ProjectBoard.html" className="btn btn-light">
+                        <Link to="/" className="btn btn-light">
                             Back to Board
-                        </a>
+                        </Link>
                         <h4 className="display-4 text-center">Add /Update Project Task</h4>
                         <form>
                             <div className="form-group">
@@ -34,4 +44,15 @@ function UpdateTask() {
     )
 }
 
-export default UpdateTask
+UpdateTask.propTypes = {
+    task: PropTypes.object.isRequired,
+    getTaskAction: PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+    task: state.task,
+    errors: state.errors
+})
+
+export default connect(mapStateToProps, {getTaskAction}) (UpdateTask);
