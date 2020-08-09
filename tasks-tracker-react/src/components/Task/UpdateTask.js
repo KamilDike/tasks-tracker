@@ -18,7 +18,6 @@ function UpdateTask(props) {
     }, [])
 
     useEffect(() => {
-        console.log('props loaded')
         if (props.errors) {
             console.log(props.errors)
             setErrors(props.errors)
